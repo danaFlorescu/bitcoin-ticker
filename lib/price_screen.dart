@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'coin_data.dart';
 import 'dart:io' show Platform;
 import 'ConversionRate.dart';
+import 'package:my_bitcoin_ticker_solution/ShowCurrency.dart';
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -12,7 +13,9 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
 
-  String finalCurrency = "";
+  String finalCurrencyBTC = "";
+  String finalCurrencyETH = "";
+  String finalCurrencyLTC = "";
 
   DropdownButton<String> androidDropdown() {
     List<DropdownMenuItem<String>> dropdownItems = [];
@@ -53,11 +56,22 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   void loadData() async {
-    Conversion conversion = new Conversion('BTC', selectedCurrency);
+    //bitcoin
+    Conversion conversionBTC = new Conversion('BTC', selectedCurrency);
+    String myVarBTC = (await conversionBTC.getCurrency())["rate"].toString();
 
-    String myVar = (await conversion.getCurrency())["rate"].toString();
+    //ethereum
+    Conversion conversionETH = new Conversion('ETH', selectedCurrency);
+    String myVarETH = (await conversionETH.getCurrency())["rate"].toString();
+
+    //litecoin
+    Conversion conversionLTC = new Conversion('LTC', selectedCurrency);
+    String myVarLTC = (await conversionLTC.getCurrency())["rate"].toString();
+
     setState(() {
-      finalCurrency = myVar;
+      finalCurrencyBTC = myVarBTC;
+      finalCurrencyETH = myVarETH;
+      finalCurrencyLTC = myVarLTC;
     });
   }
 
@@ -77,27 +91,9 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 BTC = $finalCurrency $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          ShowCurrency(typeOfCurrency: "BTC", finalCurrency: finalCurrencyBTC),
+          ShowCurrency(typeOfCurrency: "ETH", finalCurrency: finalCurrencyETH),
+          ShowCurrency(typeOfCurrency: "LTC", finalCurrency: finalCurrencyLTC),
           Container(
             height: 150.0,
             alignment: Alignment.center,
