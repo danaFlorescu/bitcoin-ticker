@@ -1,2 +1,2 @@
 # bitcoin-ticker
-My solution to the Angela Yu's Bitcoin challange
+My solution to the Angela's Yu Bitcoin challange
